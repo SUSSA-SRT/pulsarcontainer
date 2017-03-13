@@ -106,4 +106,13 @@ RUN cd /home/pulsar/pulsar_software/cfitsio && \
 
 RUN cd /home/pulsar/pulsar_software/psrcat_tar && /bin/bash -c "source makeit" && cp psrcat $ASTROSOFT/bin/
 
+RUN cd /home/pulsar/pulsar_software/ && mkdir pgplot_dir
+
+COPY pgplot_drivers.list /home/pulsar/pulsar_software/pgplot_dir/drivers.list
+
+COPY pgplot_makefile /home/pulsar/pulsar_software/pgplot_dir/makefile
+
+RUN make > build.log && make clean > clean.log && make cpg > cpg.log && \
+    ld -shared -o libcpgplot.so --whole-archive libcpgplot.a
+
 CMD [ "/bin/bash" ]

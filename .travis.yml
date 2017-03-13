@@ -8,10 +8,9 @@ services:
 before_install:
   - docker build -t matteobachetti/pulsar_experiments .
   - docker run -d -p 127.0.0.1:80:4567 matteobachetti/pulsar_experiments /bin/sh -c "cd /home/pulsar"
-  - docker ps -a
 
 script:
-  - /bin/bash
+  - docker ps | grep matteobachetti/pulsar_experiments
 
 after_success:
   - if [ "$TRAVIS_BRANCH" == "master" ]; then

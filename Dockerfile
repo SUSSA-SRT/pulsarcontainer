@@ -75,10 +75,10 @@ RUN cd /home/pulsar/pulsar_software && \
     wget http://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/cfitsio_latest.tar.gz && \
     wget http://www.atnf.csiro.au/people/pulsar/psrcat/downloads/psrcat_pkg.tar.gz && \
     wget ftp://ftp.astro.caltech.edu/pub/pgplot/pgplot5.2.tar.gz && \
-    mkdir fftw-3 cfitsio-latest psrcat_pkg pgplot && \
+    mkdir fftw-3 cfitsio psrcat_tar pgplot && \
     tar zxvf fftw-3.3.6-pl1.tar.gz -C /home/pulsar/pulsar_software/fftw-3 --strip-components=1 && \
-    tar zxvf cfitsio_latest.tar.gz -C /home/pulsar/pulsar_software/cfitsio-latest --strip-components=1 && \
-    tar zxvf psrcat_pkg.tar.gz -C /home/pulsar/pulsar_software/psrcat_pkg --strip-components=1 && \
+    tar zxvf cfitsio_latest.tar.gz -C /home/pulsar/pulsar_software/cfitsio --strip-components=1 && \
+    tar zxvf psrcat_pkg.tar.gz -C /home/pulsar/pulsar_software/psrcat_tar --strip-components=1 && \
     tar zxvf pgplot5.2.tar.gz -C /home/pulsar/pulsar_software/pgplot --strip-components=1 && \
     rm *.tar.gz
 
@@ -89,5 +89,21 @@ RUN cd /home/pulsar/pulsar_software && \
     git clone -v git://git.code.sf.net/p/tempo/tempo && \
     git clone -v git://git.code.sf.net/p/dspsr/code dspsr && \
     git clone -v https://github.com/SixByNine/sigproc.git
+
+ENV ASTROSOFT /home/pulsar/pulsar_software
+
+RUN cd /home/pulsar/pulsar_software/fftw-3 && \
+    ./configure --prefix=$ASTROSOFT --enable-float --enable-threads --enable-shared CFLAGS=-fPIC FFLAGS=-fPIC && \
+    make && make check && make install && make clean && \
+    ./configure --prefix=$ASTROSOFT CFLAGS=-fPIC FFLAGS=-fPIC && \
+    make && make check && make install && make clean
+
+RUN cd /home/pulsar/pulsar_software/cfitsio && \
+    ./configure --prefix=$ASTROSOFT CFLAGS=-fPIC FFLAGS=-fPIC && \
+    make shared && \
+    make install && \
+    make clean
+
+RUN cd /home/pulsar/pulsar_software/psrcat_tar && source makeit && cp psrcat $ASTROSOFT/bin/
 
 CMD [ "/bin/bash" ]

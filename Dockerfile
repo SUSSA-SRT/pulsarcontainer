@@ -119,7 +119,8 @@ RUN cd $ASTROSOFT/pgplot_build && make > build.log && make clean > clean.log && 
 
 ENV PGPLOT_DIR $ASTROSOFT/pgplot_build
 
-RUN cd $ASTROSOFT/tempo && ./prepare && ./configure F77=gfortran --prefix=$ASTROSOFT CFLAGS=-fPIC FFLAGS=-fPIC > configure.log && \
+RUN cd $ASTROSOFT/tempo && ./prepare && \
+    ./configure F77=gfortran --prefix=$ASTROSOFT CFLAGS=-fPIC FFLAGS=-fPIC > configure.log && \
     make > build.log && make install > install.log
 
 RUN cd $ASTROSOFT/tempo2 && ./bootstrap && \
@@ -129,5 +130,10 @@ RUN cd $ASTROSOFT/tempo2 && ./bootstrap && \
     make > build.log && make install > install.log && \
     make plugins > plugins.log && make plugins-install > plugins-install.log && \
     make unsupported > unsupported.log && make clean > clean.log
+
+RUN cd $ASTROSOFT/psrchive && ./bootstrap && \
+    ./configure F77=gfortran --prefix=$ASTROSOFT --with-cfitsio-dir=$ASTROSOFT --with-fftw3-dir=$ASTROSOFT \
+        --enable-shared CFLAGS=-fPIC FFLAGS=-fPIC > configure.log && \
+    make >build.log && make install >install.log && make clean > clean.log
 
 CMD [ "/bin/bash" ]

@@ -136,4 +136,12 @@ RUN cd $ASTROSOFT/psrchive && ./bootstrap && \
         --enable-shared CFLAGS=-fPIC FFLAGS=-fPIC > configure.log && \
     make >build.log && make install >install.log && make clean > clean.log
 
+RUN cd $ASTROSOFT/sigproc && ./bootstrap && \
+    ./configure --prefix=$ASTROSOFT --with-cfitsio-dir=$ASTROSOFT \
+        --with-fftw-dir=$ASTROSOFT F77=gfortran CFLAGS=-fPIC \
+        FFLAGS=-fPIC CPPFLAGS=-I$ASTROSOFT/include \
+        LDFLAGS="-L$ASTROSOFT/lib -L$PGPLOT_DIR -L/usr/lib/x86_64-linux-gnu" \
+        LIBS="-lX11 -ltempo2pred -lpng" > configure.log && \
+    make > build.log && make install > install.log && make clean > clean.log
+
 CMD [ "/bin/bash" ]

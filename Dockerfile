@@ -127,7 +127,8 @@ RUN ./prepare && \
 WORKDIR $ASTROSOFT/tempo2
 # Workaround for Text file busy error - from mserylak's pulsar_docker
 RUN sync && perl -pi -e 's/chmod \+x/#chmod +x/' bootstrap
-RUN ./configure F77=gfortran --prefix=$ASTROSOFT --with-cfitsio-dir=$ASTROSOFT \
+RUN ./bootstrap && \
+    ./configure F77=gfortran --prefix=$ASTROSOFT --with-cfitsio-dir=$ASTROSOFT \
         --with-fftw3-dir=$ASTROSOFT CFLAGS=-fPIC FFLAGS=-fPIC \
         CXXFLAGS="-I$ASTROSOFT/include -I$PGPLOT_DIR" LDFLAGS=-L$PGPLOT_DIR > configure.log && \
     make > build.log && make install > install.log && \
@@ -136,13 +137,15 @@ RUN ./configure F77=gfortran --prefix=$ASTROSOFT --with-cfitsio-dir=$ASTROSOFT \
 
 WORKDIR $ASTROSOFT/psrchive
 RUN sync && perl -pi -e 's/chmod \+x/#chmod +x/' bootstrap
-RUN ./configure F77=gfortran --prefix=$ASTROSOFT --with-cfitsio-dir=$ASTROSOFT --with-fftw3-dir=$ASTROSOFT \
+RUN ./bootstrap && \
+    ./configure F77=gfortran --prefix=$ASTROSOFT --with-cfitsio-dir=$ASTROSOFT --with-fftw3-dir=$ASTROSOFT \
         --enable-shared CFLAGS=-fPIC FFLAGS=-fPIC > configure.log && \
     make >build.log && make install >install.log && make clean > clean.log
 
 WORKDIR $ASTROSOFT/sigproc
 RUN sync && perl -pi -e 's/chmod \+x/#chmod +x/' bootstrap
-RUN ./configure --prefix=$ASTROSOFT --with-cfitsio-dir=$ASTROSOFT \
+RUN ./bootstrap && \
+    ./configure --prefix=$ASTROSOFT --with-cfitsio-dir=$ASTROSOFT \
         --with-fftw-dir=$ASTROSOFT F77=gfortran CFLAGS=-fPIC \
         FFLAGS=-fPIC CPPFLAGS=-I$ASTROSOFT/include \
         LDFLAGS="-L$ASTROSOFT/lib -L$PGPLOT_DIR -L/usr/lib/x86_64-linux-gnu" \

@@ -115,4 +115,8 @@ COPY pgplot_makefile /home/pulsar/pulsar_software/pgplot_dir/makefile
 RUN make > build.log && make clean > clean.log && make cpg > cpg.log && \
     ld -shared -o libcpgplot.so --whole-archive libcpgplot.a
 
+RUN cd $ASTROSOFT/tempo && ./prepare && ./configure F77=gfortran --prefix=$ASTROSOFT CFLAGS=-fPIC FFLAGS=-fPIC > configure.log && \
+    make > build.log && make install > install.log
+
+
 CMD [ "/bin/bash" ]

@@ -117,6 +117,8 @@ COPY pgplot_grexec.f $ASTROSOFT/pgplot_build/grexec.f
 RUN cd $ASTROSOFT/pgplot_build && make > build.log && make clean > clean.log && make cpg > cpg.log && \
     ld -shared -o libcpgplot.so --whole-archive libcpgplot.a
 
+ENV PGPLOT_DIR $ASTROSOFT/pgplot_build
+
 RUN cd $ASTROSOFT/tempo && ./prepare && ./configure F77=gfortran --prefix=$ASTROSOFT CFLAGS=-fPIC FFLAGS=-fPIC > configure.log && \
     make > build.log && make install > install.log
 

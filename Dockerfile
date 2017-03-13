@@ -74,20 +74,20 @@ RUN cd /home/pulsar/pulsar_software && \
     wget http://www.fftw.org/fftw-3.3.6-pl1.tar.gz && \
     wget http://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/cfitsio_latest.tar.gz && \
     wget http://www.atnf.csiro.au/people/pulsar/psrcat/downloads/psrcat_pkg.tar.gz && \
-    wget ftp://ftp.astro.caltech.edu/pub/pgplot/pgplot5.2.tar.gz
+    wget ftp://ftp.astro.caltech.edu/pub/pgplot/pgplot5.2.tar.gz && \
+    mkdir fftw-3 cfitsio-latest psrcat_pkg pgplot && \
+    tar zxvf fftw-3.3.6-pl1.tar.gz -C /home/pulsar/pulsar_software/fftw-3 --strip-components=1 && \
+    tar zxvf cfitsio_latest.tar.gz -C /home/pulsar/pulsar_software/cfitsio-latest --strip-components=1 && \
+    tar zxvf psrcat_pkg.tar.gz -C /home/pulsar/pulsar_software/psrcat_pkg --strip-components=1 && \
+    tar zxvf pgplot5.2.tar.gz -C /home/pulsar/pulsar_software/pgplot --strip-components=1 && \
+    rm *.tar.gz
 
 RUN cd /home/pulsar/pulsar_software && \
-    tar zxvf fftw-3.3.6-pl1.tar.gz -C ./fftw-3 --strip-components=1 && \
-    tar zxvf cfitsio_latest.tar.gz -C ./cfitsio-latest --strip-components=1 && \
-    tar zxvf psrcat_pkg.tar.gz -C psrcat_pkg --strip-components=1 && \
-    tar zxvf pgplot5.2.tar.gz -C pgplot --strip-components=1
-
-RUN cd /home/pulsar/pulsar_software && \
-    git clone git://git.code.sf.net/p/psrchive/code psrchive && \
-    git clone git://git.code.sf.net/p/tempo/tempo && \
-    git clone https://bitbucket.org/psrsoft/tempo2.git && \
-    git clone git://github.com/scottransom/presto.git && \
-    git clone git://git.code.sf.net/p/dspsr/code dspsr && \
-    git clone https://github.com/SixByNine/sigproc.git
+    git clone -v https://bitbucket.org/psrsoft/tempo2.git && \
+    git clone -v git://github.com/scottransom/presto.git && \
+    git clone -v git://git.code.sf.net/p/psrchive/code psrchive && \
+    git clone -v git://git.code.sf.net/p/tempo/tempo && \
+    git clone -v git://git.code.sf.net/p/dspsr/code dspsr && \
+    git clone -v https://github.com/SixByNine/sigproc.git
 
 CMD [ "/bin/bash" ]

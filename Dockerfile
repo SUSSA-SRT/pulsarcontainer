@@ -123,7 +123,7 @@ RUN cd $ASTROSOFT/tempo && ./prepare && \
     ./configure F77=gfortran --prefix=$ASTROSOFT CFLAGS=-fPIC FFLAGS=-fPIC > configure.log && \
     make > build.log && make install > install.log
 
-RUN cd $ASTROSOFT/tempo2 && sleep 1 && ./bootstrap && \
+RUN cd $ASTROSOFT/tempo2 && sleep 3 && ./bootstrap && \
     ./configure F77=gfortran --prefix=$ASTROSOFT --with-cfitsio-dir=$ASTROSOFT \
         --with-fftw3-dir=$ASTROSOFT CFLAGS=-fPIC FFLAGS=-fPIC \
         CXXFLAGS="-I$ASTROSOFT/include -I$PGPLOT_DIR" LDFLAGS=-L$PGPLOT_DIR > configure.log && \
@@ -131,12 +131,12 @@ RUN cd $ASTROSOFT/tempo2 && sleep 1 && ./bootstrap && \
     make plugins > plugins.log && make plugins-install > plugins-install.log && \
     make unsupported > unsupported.log && make clean > clean.log
 
-RUN cd $ASTROSOFT/psrchive && sleep 1 && ./bootstrap && \
+RUN cd $ASTROSOFT/psrchive && sleep 3 && ./bootstrap && \
     ./configure F77=gfortran --prefix=$ASTROSOFT --with-cfitsio-dir=$ASTROSOFT --with-fftw3-dir=$ASTROSOFT \
         --enable-shared CFLAGS=-fPIC FFLAGS=-fPIC > configure.log && \
     make >build.log && make install >install.log && make clean > clean.log
 
-RUN cd $ASTROSOFT/sigproc && sleep 1 && ./bootstrap && \
+RUN cd $ASTROSOFT/sigproc && sleep 3 && ./bootstrap && \
     ./configure --prefix=$ASTROSOFT --with-cfitsio-dir=$ASTROSOFT \
         --with-fftw-dir=$ASTROSOFT F77=gfortran CFLAGS=-fPIC \
         FFLAGS=-fPIC CPPFLAGS=-I$ASTROSOFT/include \

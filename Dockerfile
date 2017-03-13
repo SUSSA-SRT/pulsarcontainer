@@ -118,5 +118,12 @@ RUN make > build.log && make clean > clean.log && make cpg > cpg.log && \
 RUN cd $ASTROSOFT/tempo && ./prepare && ./configure F77=gfortran --prefix=$ASTROSOFT CFLAGS=-fPIC FFLAGS=-fPIC > configure.log && \
     make > build.log && make install > install.log
 
+RUN cd $ASTROSOFT/tempo2 && ./bootstrap && \
+    ./configure F77=gfortran --prefix=$ASTROSOFT --with-cfitsio-dir=$ASTROSOFT \
+        --with-fftw3-dir=$ASTROSOFT CFLAGS=-fPIC FFLAGS=-fPIC \
+        CXXFLAGS="-I$ASTROSOFT/include -I$PGPLOT_DIR" LDFLAGS=-L$PGPLOT_DIR > configure.log && \
+    make > build.log && make install > install.log && \
+    make plugins > plugins.log && make plugins-install > plugins-install.log && \
+    make unsupported > unsupported.log && make clean > clean.log
 
 CMD [ "/bin/bash" ]

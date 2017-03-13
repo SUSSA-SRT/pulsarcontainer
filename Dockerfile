@@ -126,6 +126,7 @@ RUN ./prepare && \
 
 WORKDIR $ASTROSOFT/tempo2
 # Workaround for Text file busy error - from mserylak's pulsar_docker
+ENV TEMPO2 $ASTROSOFT/tempo2/T2runtime
 RUN sync && perl -pi -e 's/chmod \+x/#chmod +x/' bootstrap
 RUN ./bootstrap && \
     ./configure F77=gfortran --prefix=$ASTROSOFT --with-cfitsio-dir=$ASTROSOFT \

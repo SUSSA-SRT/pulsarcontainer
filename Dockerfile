@@ -95,7 +95,7 @@ ENV ASTROSOFT /home/pulsar/pulsar_software
 RUN cd /home/pulsar/pulsar_software/fftw-3 && \
     ./configure --prefix=$ASTROSOFT --enable-float --enable-threads --enable-shared CFLAGS=-fPIC FFLAGS=-fPIC > configure.log && \
     make > build.log && make check > check.log && make install > install.log && make clean  > clean.log && \
-    ./configure --prefix=$ASTROSOFT CFLAGS=-fPIC FFLAGS=-fPIC && \
+    ./configure --prefix=$ASTROSOFT CFLAGS=-fPIC FFLAGS=-fPIC > configure2.log && \
     make > build2.log && make check > check2.log && make install > install2.log && make clean > clean2.log
 
 RUN cd /home/pulsar/pulsar_software/cfitsio && \

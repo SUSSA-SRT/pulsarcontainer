@@ -49,12 +49,15 @@ ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:$PRESTO/lib
 ENV PYTHONPATH $PYTHONPATH:$PRESTO/lib/python
 WORKDIR $PRESTO/src
 # RUN make makewisdom
-RUN make prep && \
-    make
+RUN make prep && mv Makefile Makefile.bak
+RUN cat Makefile.bak | sed -e 's/.ffast-math/-ffast-math -lm/' > Makefile
+RUN make FFTINC="-I$(ASTROSOFT)/include" FFTLINK="-L$(ASTROSOFT)/lib -lfftw3f" CFITSIOINC="-I$(ASTROSOFT)/include" \
+        CFITSIOLINK="-L$(ASTROSOFT)/lib -lcfitsio" FFLAGS='-g -fPIC'
 WORKDIR $PRESTO/python/ppgplot_src
 RUN mv _ppgplot.c _ppgplot.c_ORIGINAL && \
     wget https://raw.githubusercontent.com/mserylak/pulsar_docker/master/ppgplot/_ppgplot.c
 WORKDIR $PRESTO/python
-RUN make
+RUN make FFTINC="-I$(ASTROSOFT)/include" FFTLINK="-L$(ASTROSOFT)/lib -lfftw3f" CFITSIOINC="-I$(ASTROSOFT)/include" \
+        CFITSIOLINK="-L$(ASTROSOFT)/lib -lcfitsio" FFLAGS='-g -fPIC'
 
 CMD [ "/bin/bash" ]

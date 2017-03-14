@@ -3,8 +3,6 @@ FROM matteobachetti/basecontainer
 MAINTAINER Matteo Bachetti <matteo@matteobachetti.it>
 
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
-
-RUN apt-get update -y && apt-get update -y
 ENV ASTROSOFT /home/pulsar/pulsar_software
 ENV PGPLOT_DIR $ASTROSOFT/pgplot_build
 
@@ -42,11 +40,19 @@ RUN ./bootstrap && \
         LIBS="-lX11 -ltempo2pred -lpng" > configure.log && \
     make > build.log && make install > install.log && make clean > clean.log
 
-WORKDIR $ASTROSOFT/dspsr
-RUN echo apsr asp bcpm bpsr caspsr cpsr2 cpsr dummy fits gmrt guppi kat lbadr64 lbadr lump lwa mark4 mark5 maxim mwa pdev pmdaq s2 sigproc spda1k spigot vdif > backends.list && \
-    ./bootstrap && sleep 1 && \
-    ./configure --prefix=$ASTROSOFT --with-cfitsio-dir=$ASTROSOFT \
-        F77=gfortran CFLAGS=-fPIC FFLAGS=-fPIC LDFLAGS=-L$PGPLOT_DIR > configure.log && \
-    make > build.log && make install > install.log && make clean > clean.log
+# PRESTO - excerpt from mserylak
+ENV PRESTO $ASTROSOFT/presto
+ENV PATH $PATH:$PRESTO/bin
+ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:$PRESTO/lib
+ENV PYTHONPATH $PYTHONPATH:$PRESTO/lib/python
+WORKDIR $PRESTO/src
+# RUN make makewisdom
+RUN make prep && \
+    make
+WORKDIR $PRESTO/python/ppgplot_src
+RUN mv _ppgplot.c _ppgplot.c_ORIGINAL && \
+    wget https://raw.githubusercontent.com/mserylak/pulsar_docker/master/ppgplot/_ppgplot.c
+WORKDIR $PRESTO/python
+RUN make
 
 CMD [ "/bin/bash" ]

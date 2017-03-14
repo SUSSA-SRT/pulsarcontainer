@@ -2,6 +2,8 @@ FROM matteobachetti/basecontainer
 
 MAINTAINER Matteo Bachetti <matteo@matteobachetti.it>
 
+USER pulsar
+
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 ENV ASTROSOFT /home/pulsar/pulsar_software
 ENV PGPLOT_DIR $ASTROSOFT/pgplot_build

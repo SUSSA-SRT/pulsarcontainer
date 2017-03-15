@@ -1,4 +1,4 @@
-FROM matteobachetti/basecontainer
+FROM sussa/basecontainer
 
 MAINTAINER Matteo Bachetti <matteo@matteobachetti.it>
 

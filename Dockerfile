@@ -8,6 +8,13 @@ ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 ENV ASTROSOFT /home/pulsar/pulsar_software
 ENV PGPLOT_DIR $ASTROSOFT/pgplot_build
 
+ENV PGPLOT_DIR /usr/lib/pgplot5
+ENV PGPLOT_FONT /usr/lib/pgplot5/grfont.dat
+ENV PGPLOT_INCLUDES /usr/include
+ENV PGPLOT_BACKGROUND white
+ENV PGPLOT_FOREGROUND black
+ENV PGPLOT_DEV /xs
+
 WORKDIR $ASTROSOFT/tempo
 RUN ./prepare && \
     ./configure F77=gfortran --prefix=$ASTROSOFT CFLAGS=-fPIC FFLAGS=-fPIC > configure.log && \
@@ -57,5 +64,7 @@ RUN mv _ppgplot.c _ppgplot.c_ORIGINAL && \
     wget https://raw.githubusercontent.com/mserylak/pulsar_docker/master/ppgplot/_ppgplot.c
 WORKDIR $PRESTO/python
 RUN make > buildpy.log
+
+WORKDIR /home/pulsar
 
 CMD [ "/bin/bash" ]

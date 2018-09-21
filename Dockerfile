@@ -60,10 +60,22 @@ RUN make prep && mv Makefile Makefile.bak
 RUN cat Makefile.bak | sed -e 's/.ffast-math/-ffast-math -lm/' > Makefile
 RUN make > build.log
 WORKDIR $PRESTO/python/ppgplot_src
-RUN mv _ppgplot.c _ppgplot.c_ORIGINAL && \
-    wget https://raw.githubusercontent.com/mserylak/pulsar_docker/master/ppgplot/_ppgplot.c
+RUN mv _ppgplot.c _ppgplot.c_ORIGINAL 
+COPY _ppgplot.c _ppgplot.c
+
 WORKDIR $PRESTO/python
 RUN make > buildpy.log
+
+# dspsr
+WORKDIR $ASTROSOFT/dspsr
+RUN echo apsr asp bcpm bpsr caspsr cpsr2 cpsr dummy fits gmrt guppi kat lbadr64 lbadr lump lwa mark4 mark5 maxim mwa pdev pmdaq s2 sigproc spda1k spigot vdif > backends.list
+
+ENV PATH $PATH:$PRESTO/bin:$ASTROSOFT/bin
+
+RUN ./bootstrap && \
+    ./configure --prefix=$ASTROSOFT --with-cfitsio-dir=$ASTROSOFT F77=gfortran \
+        CFLAGS=-fPIC FFLAGS=-fPIC LDFLAGS=-L$PGPLOT_DIR && \
+    make > build.log && make install > install.log && make clean
 
 WORKDIR /home/pulsar
 
